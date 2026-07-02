@@ -1041,28 +1041,27 @@ export const mockSubscriptionPlans: SubscriptionPlan[] = [
   {
     tier: "free",
     name: "Free",
-    tagline: "Get started with the essentials of your study journey",
+    tagline: "Every core planning tool, free for every student",
     priceMonthly: 0,
     priceYearly: 0,
     highlighted: false,
     perks: [
+      "AI Assessment, Course Selection & Schedule Builder",
       "Dashboard & Weekly Smart Planner",
       "Adaptive Roadmap & Skill Gap Matrix",
       "AI Assistant — 5 messages / day",
-      "Basic study analytics",
     ],
   },
   {
     tier: "pro",
     name: "Pro",
-    tagline: "Unlock full AI-powered course planning and progress tracking",
+    tagline: "Unlock unlimited AI help and deeper progress tracking",
     priceMonthly: 9.99,
-    priceYearly: 1490,
+    priceYearly: 99.99,
     highlighted: true,
     perks: [
       "Everything in Free",
       "Unlimited AI Assistant messages",
-      "Course Selection & Optimized Schedule Builder",
       "GPA & Credit progress tracking",
       "Full Knowledge Gap history log",
     ],
@@ -1084,10 +1083,11 @@ export const mockSubscriptionPlans: SubscriptionPlan[] = [
 ];
 
 export const mockPlanFeatures: PlanFeatureRow[] = [
+  { key: "ai_assessment", label: "AI Assessment", free: true, pro: true, diamond: true },
+  { key: "course_selection", label: "Course Selection & Optimized Scheduling", free: true, pro: true, diamond: true },
   { key: "dashboard", label: "Dashboard & Weekly Smart Planner", free: true, pro: true, diamond: true },
   { key: "roadmap", label: "Adaptive Roadmap & Skill Gap Matrix", free: true, pro: true, diamond: true },
   { key: "ai_assistant", label: "AI Learning Assistant", free: "5 messages / day", pro: "Unlimited", diamond: "Unlimited + priority" },
-  { key: "course_selection", label: "Course Selection & Optimized Scheduling", free: false, pro: true, diamond: true },
   { key: "academic_progress", label: "GPA & Credit Progress Tracking", free: false, pro: true, diamond: true },
   { key: "knowledge_gap_history", label: "Knowledge Gap History Log", free: false, pro: true, diamond: true },
   { key: "mentor_sessions", label: "1-on-1 Mentor Consultation", free: false, pro: false, diamond: "2 sessions / month" },

@@ -1,13 +1,10 @@
 "use client";
 
 import { useCourseSelection, MAX_CREDITS_PER_SEMESTER } from "@/presentation/hooks/useCourseSelection";
-import { useSubscriptionGate } from "@/presentation/hooks/useSubscriptionGate";
 import { CourseRecommendationList } from "@/presentation/components/courses/CourseRecommendationList";
 import { CourseSelectionCart } from "@/presentation/components/courses/CourseSelectionCart";
-import { UpgradeGate } from "@/presentation/components/subscription/UpgradeGate";
 
 export default function CourseSelectionPage() {
-  const { hasAccess, isLoading: isGateLoading } = useSubscriptionGate("pro");
   const {
     recommendations,
     degreeRequirements,
@@ -19,16 +16,12 @@ export default function CourseSelectionPage() {
     toggleCourse,
   } = useCourseSelection();
 
-  if (isLoading || isGateLoading) {
+  if (isLoading) {
     return (
       <div className="flex h-96 items-center justify-center text-sm text-slate-400">
         Loading Course Recommendations...
       </div>
     );
-  }
-
-  if (!hasAccess) {
-    return <UpgradeGate requiredTier="pro" featureName="Course Selection" />;
   }
 
   return (

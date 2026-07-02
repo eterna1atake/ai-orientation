@@ -18,7 +18,6 @@ export default function SubscriptionPage() {
     pendingTier,
     selectTier,
     cancelPendingChange,
-    isPendingUpgrade,
     confirmTierChange,
     isLoading,
     isChanging,
@@ -38,7 +37,7 @@ export default function SubscriptionPage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Subscription</h1>
-        <p className="mt-1 text-sm text-slate-500">Simulate upgrading or downgrading your plan — no real payment involved</p>
+        <p className="mt-1 text-sm text-slate-500">Compare plans and simulate an upgrade or downgrade — no real payment involved</p>
       </div>
 
       <CurrentPlanBanner subscription={subscription} plan={currentPlan} />
@@ -47,8 +46,8 @@ export default function SubscriptionPage() {
         <Card className="border-indigo-200 bg-indigo-50/60">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-slate-700">
-              {isPendingUpgrade ? "Upgrade" : "Switch"} to <span className="font-semibold">{pendingPlan.name}</span>{" "}
-              ({billingCycle === "yearly" ? "billed yearly" : "billed monthly"})?
+              Downgrade to <span className="font-semibold">{pendingPlan.name}</span>? This takes effect
+              immediately — no charge involved.
             </p>
             <div className="flex gap-2">
               <button

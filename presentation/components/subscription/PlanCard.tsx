@@ -1,6 +1,7 @@
-import { Check, Sparkles, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { Check, Sparkles, Loader2, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { SubscriptionPlan, SubscriptionTier, BillingCycle } from "@/domain/entities";
-import { getPriceForCycle } from "@/domain/usecases";
+import { getPriceForCycle, isUpgrade } from "@/domain/usecases";
 import { Card } from "@/presentation/components/ui/Card";
 import { Badge } from "@/presentation/components/ui/Badge";
 
@@ -17,6 +18,7 @@ export function PlanCard({ plan, billingCycle, currentTier, pendingTier, isChang
   const isCurrent = plan.tier === currentTier;
   const isPending = plan.tier === pendingTier;
   const price = getPriceForCycle(plan, billingCycle);
+  const isUpgradeTarget = isUpgrade(currentTier, plan.tier);
 
   return (
     <Card
@@ -55,21 +57,29 @@ export function PlanCard({ plan, billingCycle, currentTier, pendingTier, isChang
           <Badge tone="green" className="w-full justify-center py-2 text-sm">
             Current Plan
           </Badge>
+        ) : isUpgradeTarget ? (
+          <Link
+            href={`/checkout?tier=${plan.tier}&cycle=${billingCycle}`}
+            className={`flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors ${
+              plan.highlighted ? "bg-indigo-600 text-white hover:bg-indigo-700" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+            }`}
+          >
+            <ArrowUpRight className="h-4 w-4" /> Upgrade
+          </Link>
         ) : (
           <button
             onClick={() => onSelect(plan.tier)}
             disabled={isChanging}
-            className={`flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors disabled:opacity-60 ${plan.highlighted
-                ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-              }`}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 disabled:opacity-60"
           >
             {isPending && isChanging ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" /> Processing...
               </>
             ) : (
-              "Choose Plan"
+              <>
+                <ArrowDownRight className="h-4 w-4" /> Downgrade
+              </>
             )}
           </button>
         )}

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { SubscriptionPlan, PlanFeatureRow, UserSubscription, SubscriptionTier, BillingCycle } from "@/domain/entities";
 import { fetchSubscriptionPlans, fetchPlanFeatures, fetchUserSubscription, changeSubscriptionTier } from "@/data/repositories";
-import { isUpgrade } from "@/domain/usecases";
 
 export function useSubscription() {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
@@ -52,7 +51,6 @@ export function useSubscription() {
     pendingTier,
     selectTier: setPendingTier,
     cancelPendingChange: () => setPendingTier(null),
-    isPendingUpgrade: subscription && pendingTier ? isUpgrade(subscription.tier, pendingTier) : false,
     confirmTierChange,
     isLoading,
     isChanging,

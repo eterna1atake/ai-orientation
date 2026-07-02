@@ -3,14 +3,11 @@
 import Link from "next/link";
 import { CalendarRange, Wand2, BookOpen } from "lucide-react";
 import { useScheduleBuilder } from "@/presentation/hooks/useScheduleBuilder";
-import { useSubscriptionGate } from "@/presentation/hooks/useSubscriptionGate";
 import { OptimizedScheduleView } from "@/presentation/components/schedule/OptimizedScheduleView";
 import { WorkloadMeterWidget } from "@/presentation/components/schedule/WorkloadMeterWidget";
-import { UpgradeGate } from "@/presentation/components/subscription/UpgradeGate";
 import { Card } from "@/presentation/components/ui/Card";
 
 export default function ScheduleBuilderPage() {
-  const { hasAccess, isLoading: isGateLoading } = useSubscriptionGate("pro");
   const {
     selectedCourses,
     schedule,
@@ -25,16 +22,12 @@ export default function ScheduleBuilderPage() {
     unlockSchedule,
   } = useScheduleBuilder();
 
-  if (isLoading || isGateLoading) {
+  if (isLoading) {
     return (
       <div className="flex h-96 items-center justify-center text-sm text-slate-400">
         Loading Schedule Builder...
       </div>
     );
-  }
-
-  if (!hasAccess) {
-    return <UpgradeGate requiredTier="pro" featureName="Schedule Builder" />;
   }
 
   return (
