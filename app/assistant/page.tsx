@@ -6,8 +6,18 @@ import { ResourceGrid } from "@/presentation/components/assistant/ResourceGrid";
 import { KnowledgeGapPanel } from "@/presentation/components/assistant/KnowledgeGapPanel";
 
 export default function AssistantPage() {
-  const { threads, activeThread, setActiveThreadId, sendMessage, isAiTyping, resources, knowledgeGapAlerts, isLoading } =
-    useAIAssistant();
+  const {
+    threads,
+    activeThread,
+    setActiveThreadId,
+    sendMessage,
+    isAiTyping,
+    resources,
+    knowledgeGapAlerts,
+    isLoading,
+    remainingAIMessages,
+    isLimitReached,
+  } = useAIAssistant();
 
   if (isLoading) {
     return (
@@ -32,6 +42,8 @@ export default function AssistantPage() {
             onSelectThread={setActiveThreadId}
             onSendMessage={sendMessage}
             isAiTyping={isAiTyping}
+            remainingMessages={remainingAIMessages}
+            isLimitReached={isLimitReached}
           />
         </div>
         <div className="space-y-6 lg:col-span-2">

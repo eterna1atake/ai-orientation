@@ -8,3 +8,6 @@ export * from "./KnowledgeGapUsecases";
 export * from "./AnalyticsUsecases";
 export * from "./GenerateMockAIResponse";
 export * from "./ResourceUsecases";
+export * from "./CourseUsecases";
+export * from "./AssessmentUsecases";
+export * from "./SubscriptionUsecases";

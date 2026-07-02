@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { Send, Sparkles, User } from "lucide-react";
+import { Send, Sparkles, User, Lock } from "lucide-react";
 import { ChatThread } from "@/domain/entities";
 import { Card } from "@/presentation/components/ui/Card";
 
@@ -11,9 +12,19 @@ interface ChatPanelProps {
   onSelectThread: (threadId: string) => void;
   onSendMessage: (content: string) => void;
   isAiTyping: boolean;
+  remainingMessages: number | null;
+  isLimitReached: boolean;
 }
 
-export function ChatPanel({ threads, activeThread, onSelectThread, onSendMessage, isAiTyping }: ChatPanelProps) {
+export function ChatPanel({
+  threads,
+  activeThread,
+  onSelectThread,
+  onSendMessage,
+  isAiTyping,
+  remainingMessages,
+  isLimitReached,
+}: ChatPanelProps) {
   const [draft, setDraft] = useState("");
 
   function handleSubmit(e: FormEvent) {
@@ -76,22 +87,46 @@ export function ChatPanel({ threads, activeThread, onSelectThread, onSendMessage
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="flex items-center gap-2 border-t border-slate-100 p-3">
-        <input
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Type your question, e.g. about Docker Networks..."
-          className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-        />
-        <button
-          type="submit"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
-          disabled={!draft.trim()}
-          aria-label="Send message"
-        >
-          <Send className="h-4 w-4" />
-        </button>
-      </form>
+      {isLimitReached ? (
+        <div className="flex flex-col items-center gap-2 border-t border-slate-100 p-4 text-center">
+          <p className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600">
+            <Lock className="h-4 w-4 text-amber-500" /> You&apos;ve used all your free messages for today
+          </p>
+          <Link
+            href="/subscription"
+            className="rounded-full bg-indigo-600 px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-indigo-700"
+          >
+            Upgrade to Pro for unlimited messages
+          </Link>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="border-t border-slate-100 p-3">
+          <div className="flex items-center gap-2">
+            <input
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder="Type your question, e.g. about Docker Networks..."
+              className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            />
+            <button
+              type="submit"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+              disabled={!draft.trim()}
+              aria-label="Send message"
+            >
+              <Send className="h-4 w-4" />
+            </button>
+          </div>
+          {remainingMessages !== null && (
+            <p className="mt-1.5 px-2 text-[11px] text-slate-400">
+              {remainingMessages} free message{remainingMessages === 1 ? "" : "s"} left today ·{" "}
+              <Link href="/subscription" className="text-indigo-500 hover:underline">
+                Upgrade for unlimited
+              </Link>
+            </p>
+          )}
+        </form>
+      )}
     </Card>
   );
 }

@@ -6,6 +6,22 @@ export interface WeeklyVelocityPoint {
   hoursStudied: number;
 }
 
+// Step 8: Continuous academic progress tracking
+export interface GraduationMilestone {
+  id: string;
+  title: string;
+  targetLabel: string; // e.g. "Semester 2/2026"
+  completed: boolean;
+}
+
+export interface AcademicRecord {
+  currentGPA: number;
+  targetGPA: number;
+  earnedCredits: number;
+  totalCreditsRequired: number;
+  graduationMilestones: GraduationMilestone[];
+}
+
 export interface StudyAnalytics {
   studentId: string;
   roadmapCompletionPercent: number;
@@ -15,4 +31,5 @@ export interface StudyAnalytics {
   averageDailyFocusMinutes: number;
   weeklyVelocity: WeeklyVelocityPoint[];
   subjectBreakdown: { subject: string; hoursStudied: number }[];
+  academicRecord: AcademicRecord;
 }

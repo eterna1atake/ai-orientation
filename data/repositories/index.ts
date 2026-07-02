@@ -8,3 +8,6 @@ export * from "./CareerRepository";
 export * from "./CalendarRepository";
 export * from "./KnowledgeGapRepository";
 export * from "./NotificationRepository";
+export * from "./CourseRepository";
+export * from "./AssessmentRepository";
+export * from "./SubscriptionRepository";

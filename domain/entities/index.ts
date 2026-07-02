@@ -8,3 +8,7 @@ export * from "./Career";
 export * from "./Calendar";
 export * from "./KnowledgeGap";
 export * from "./Notification";
+export * from "./Course";
+export * from "./Workload";
+export * from "./Assessment";
+export * from "./Subscription";

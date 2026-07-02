@@ -9,6 +9,14 @@ import {
   StudyBlock,
   KnowledgeGap,
   NotificationEvent,
+  UniversityCourse,
+  DegreeRequirement,
+  AcademicRecord,
+  AssessmentQuestion,
+  AssessmentTrackDefinition,
+  SubscriptionPlan,
+  PlanFeatureRow,
+  UserSubscription,
 } from "@/domain/entities";
 
 // ---------------------------------------------------------------------------
@@ -251,8 +259,23 @@ export const mockResources: Resource[] = [
 // Module 5: Study Analytics & Progress Logging
 // ---------------------------------------------------------------------------
 
+export const mockAcademicRecord: AcademicRecord = {
+  currentGPA: 3.42,
+  targetGPA: 3.6,
+  earnedCredits: 98,
+  totalCreditsRequired: 145,
+  graduationMilestones: [
+    { id: "gm-01", title: "Complete all Year 2 core courses", targetLabel: "Semester 2/2025", completed: true },
+    { id: "gm-02", title: "Pass KMUTNB English Proficiency Test", targetLabel: "Semester 1/2026", completed: true },
+    { id: "gm-03", title: "Earn 120+ credits", targetLabel: "Semester 1/2026", completed: false },
+    { id: "gm-04", title: "Cooperative Education Placement", targetLabel: "Semester 2/2026", completed: false },
+    { id: "gm-05", title: "Capstone Project Defense", targetLabel: "Semester 2/2027", completed: false },
+  ],
+};
+
 export const mockAnalytics: StudyAnalytics = {
   studentId: "std-001",
+  academicRecord: mockAcademicRecord,
   roadmapCompletionPercent: 58,
   totalTasksCompleted: 7,
   totalTasksRemaining: 5,
@@ -500,4 +523,583 @@ export const mockNotifications: NotificationEvent[] = [
     createdAt: "2026-06-15T10:00:00+07:00",
     isRead: true,
   },
+  {
+    id: "ntf-07",
+    category: "system",
+    priority: "high",
+    title: "Course Enrollment for Semester 1/2026 Is Open",
+    message: "Course registration for Semester 1/2026 is now open! Check out the AI-recommended courses based on your Skill Gap in the Course Selection tab before seats run out.",
+    createdAt: "2026-07-01T09:00:00+07:00",
+    isRead: false,
+  },
 ];
+
+// ---------------------------------------------------------------------------
+// Module 11: University Course Catalog (Steps 3-7, mock Institutional API)
+// ---------------------------------------------------------------------------
+
+export const mockCourses: UniversityCourse[] = [
+  {
+    id: "crs-01",
+    code: "060243401",
+    name: "DevOps and Cloud Infrastructure",
+    credits: 3,
+    category: "major_elective",
+    prerequisites: ["060233201"],
+    difficultyScore: 4,
+    avgWeeklyEffortHours: 6,
+    relatedSkills: ["CI/CD (GitHub Actions)", "Docker", "Cloud Infrastructure (AWS)"],
+    description: "CI/CD pipelines, containerization, infrastructure as code, and cloud deployment on AWS.",
+    sections: [
+      {
+        id: "crs-01-s1",
+        sectionLabel: "Sec 1",
+        instructorName: "Dr. Anucha Wongpanya",
+        instructorRating: 4.8,
+        seatsLeft: 8,
+        slots: [{ day: "Tuesday", startTime: "09:00", endTime: "12:00", room: "IT-405" }],
+      },
+      {
+        id: "crs-01-s2",
+        sectionLabel: "Sec 2",
+        instructorName: "Asst. Prof. Preecha Srisawat",
+        instructorRating: 4.1,
+        seatsLeft: 21,
+        slots: [{ day: "Thursday", startTime: "13:00", endTime: "16:00", room: "IT-406" }],
+      },
+    ],
+  },
+  {
+    id: "crs-02",
+    code: "060243102",
+    name: "Information System Security",
+    credits: 3,
+    category: "major_core",
+    prerequisites: ["060233103"],
+    difficultyScore: 4,
+    avgWeeklyEffortHours: 5,
+    relatedSkills: ["Authentication & Security"],
+    description: "Applied cryptography, authentication protocols, OWASP Top 10, and secure system design.",
+    sections: [
+      {
+        id: "crs-02-s1",
+        sectionLabel: "Sec 1",
+        instructorName: "Assoc. Prof. Dr. Siriporn Chaiyasit",
+        instructorRating: 4.6,
+        seatsLeft: 12,
+        slots: [{ day: "Monday", startTime: "09:00", endTime: "12:00", room: "IT-301" }],
+      },
+      {
+        id: "crs-02-s2",
+        sectionLabel: "Sec 2",
+        instructorName: "Dr. Kittipong Ruangroj",
+        instructorRating: 3.9,
+        seatsLeft: 25,
+        slots: [{ day: "Wednesday", startTime: "13:00", endTime: "16:00", room: "IT-302" }],
+      },
+    ],
+  },
+  {
+    id: "crs-03",
+    code: "060243205",
+    name: "Advanced Database Systems",
+    credits: 3,
+    category: "major_elective",
+    prerequisites: ["060223104"],
+    difficultyScore: 3,
+    avgWeeklyEffortHours: 4,
+    relatedSkills: ["MongoDB Schema Design", "SQL Fundamentals"],
+    description: "NoSQL data modeling, indexing strategies, query optimization, and distributed transactions.",
+    sections: [
+      {
+        id: "crs-03-s1",
+        sectionLabel: "Sec 1",
+        instructorName: "Dr. Narisara Bunmee",
+        instructorRating: 4.5,
+        seatsLeft: 15,
+        slots: [{ day: "Wednesday", startTime: "09:00", endTime: "12:00", room: "IT-204" }],
+      },
+    ],
+  },
+  {
+    id: "crs-04",
+    code: "060243303",
+    name: "Software Testing and Quality Assurance",
+    credits: 3,
+    category: "major_elective",
+    prerequisites: ["060233301"],
+    difficultyScore: 3,
+    avgWeeklyEffortHours: 4,
+    relatedSkills: ["Testing (Unit/Integration)"],
+    description: "Unit/integration testing, test automation, TDD workflow, and quality metrics in CI pipelines.",
+    sections: [
+      {
+        id: "crs-04-s1",
+        sectionLabel: "Sec 1",
+        instructorName: "Asst. Prof. Dr. Warunee Thongchai",
+        instructorRating: 4.4,
+        seatsLeft: 18,
+        slots: [{ day: "Thursday", startTime: "09:00", endTime: "12:00", room: "IT-207" }],
+      },
+      {
+        id: "crs-04-s2",
+        sectionLabel: "Sec 2",
+        instructorName: "Dr. Somyot Klinchan",
+        instructorRating: 4.0,
+        seatsLeft: 9,
+        slots: [{ day: "Friday", startTime: "13:00", endTime: "16:00", room: "IT-207" }],
+      },
+    ],
+  },
+  {
+    id: "crs-05",
+    code: "060243901",
+    name: "Cooperative Education Preparation",
+    credits: 1,
+    category: "major_core",
+    prerequisites: [],
+    difficultyScore: 1,
+    avgWeeklyEffortHours: 1,
+    relatedSkills: [],
+    description: "Resume writing, interview practice, and workplace readiness before the cooperative education semester.",
+    sections: [
+      {
+        id: "crs-05-s1",
+        sectionLabel: "Sec 1",
+        instructorName: "Ajarn Pimchanok Saelim",
+        instructorRating: 4.2,
+        seatsLeft: 40,
+        slots: [{ day: "Friday", startTime: "09:00", endTime: "11:00", room: "CED-101" }],
+      },
+    ],
+  },
+  {
+    id: "crs-06",
+    code: "060243207",
+    name: "Cross-Platform Mobile Application Development",
+    credits: 3,
+    category: "major_elective",
+    prerequisites: ["060233202"],
+    difficultyScore: 3,
+    avgWeeklyEffortHours: 5,
+    relatedSkills: ["React / Next.js"],
+    description: "Building iOS/Android apps with React Native, native APIs, and app store deployment.",
+    sections: [
+      {
+        id: "crs-06-s1",
+        sectionLabel: "Sec 1",
+        instructorName: "Dr. Thanawat Phumsiri",
+        instructorRating: 4.3,
+        seatsLeft: 6,
+        slots: [{ day: "Tuesday", startTime: "09:00", endTime: "12:00", room: "IT-408" }],
+      },
+      {
+        id: "crs-06-s2",
+        sectionLabel: "Sec 2",
+        instructorName: "Dr. Thanawat Phumsiri",
+        instructorRating: 4.3,
+        seatsLeft: 17,
+        slots: [{ day: "Tuesday", startTime: "13:00", endTime: "16:00", room: "IT-408" }],
+      },
+    ],
+  },
+  {
+    id: "crs-07",
+    code: "060243501",
+    name: "Machine Learning Fundamentals",
+    credits: 3,
+    category: "major_elective",
+    prerequisites: ["040203111"],
+    difficultyScore: 5,
+    avgWeeklyEffortHours: 8,
+    relatedSkills: [],
+    description: "Supervised/unsupervised learning, model evaluation, and hands-on labs with Python and scikit-learn.",
+    sections: [
+      {
+        id: "crs-07-s1",
+        sectionLabel: "Sec 1",
+        instructorName: "Assoc. Prof. Dr. Chatchai Meesuk",
+        instructorRating: 4.7,
+        seatsLeft: 4,
+        slots: [{ day: "Monday", startTime: "13:00", endTime: "16:00", room: "IT-501" }],
+      },
+    ],
+  },
+  {
+    id: "crs-08",
+    code: "080103032",
+    name: "Technical English for Career Preparation",
+    credits: 3,
+    category: "general_education",
+    prerequisites: [],
+    difficultyScore: 2,
+    avgWeeklyEffortHours: 2,
+    relatedSkills: [],
+    description: "Professional communication, technical documentation reading, and interview English for IT careers.",
+    sections: [
+      {
+        id: "crs-08-s1",
+        sectionLabel: "Sec 1",
+        instructorName: "Ajarn Suthida Kraivit",
+        instructorRating: 4.0,
+        seatsLeft: 30,
+        slots: [{ day: "Monday", startTime: "09:00", endTime: "12:00", room: "LA-210" }],
+      },
+      {
+        id: "crs-08-s2",
+        sectionLabel: "Sec 2",
+        instructorName: "Ajarn David Collins",
+        instructorRating: 4.6,
+        seatsLeft: 11,
+        slots: [{ day: "Friday", startTime: "13:00", endTime: "16:00", room: "LA-212" }],
+      },
+    ],
+  },
+];
+
+export const mockDegreeRequirements: DegreeRequirement[] = [
+  { category: "major_core", label: "Major Core Courses", requiredCredits: 88, earnedCredits: 62 },
+  { category: "major_elective", label: "Major Elective Courses", requiredCredits: 21, earnedCredits: 12 },
+  { category: "general_education", label: "General Education", requiredCredits: 30, earnedCredits: 24 },
+  { category: "free_elective", label: "Free Electives", requiredCredits: 6, earnedCredits: 0 },
+];
+
+// ---------------------------------------------------------------------------
+// Module 12: AI Assessment Questionnaire (Step 1)
+// ---------------------------------------------------------------------------
+
+export const mockAssessmentTracks: AssessmentTrackDefinition[] = [
+  {
+    key: "fullstack_devops",
+    label: "Full-Stack Development with DevOps Specialization",
+    personaSummary:
+      "Boss excels at connecting systems from frontend to backend. He enjoys seeing tangible results and is interested in making deployments run smoothly. The Full-Stack track extending into DevOps is a perfect fit.",
+  },
+  {
+    key: "data_ai",
+    label: "Data Engineering & AI Development",
+    personaSummary:
+      "Boss enjoys asking questions about data and finding hidden patterns. The Data Engineering track leading into AI will allow his analytical strengths to shine.",
+  },
+  {
+    key: "mobile_dev",
+    label: "Mobile Application Development",
+    personaSummary:
+      "Boss values user experience and loves creating apps that people use every day. The Mobile Developer track will allow him to combine creativity with technical skills.",
+  },
+  {
+    key: "security",
+    label: "Cybersecurity & Infrastructure",
+    personaSummary:
+      "Boss has a detective-like perspective, always looking to reverse-engineer systems and find vulnerabilities. The Cybersecurity track will turn his curiosity into highly sought-after skills.",
+  },
+];
+
+export const mockAssessmentQuestions: AssessmentQuestion[] = [
+  {
+    id: "aq-01",
+    order: 1,
+    prompt: "When starting a new project, what do you usually do first?",
+    helper: "Choose the option that best describes you. There are no right or wrong answers.",
+    options: [
+      {
+        id: "aq-01-a",
+        label: "Draw the overall system architecture to see how each part connects.",
+        trackWeights: { fullstack_devops: 3, security: 1 },
+        styleWeights: { Visual: 1 },
+        traitScores: { "System Thinking": 85, "Problem Decomposition": 75 },
+        interests: ["System Design"],
+      },
+      {
+        id: "aq-01-b",
+        label: "Start building the UI to see the visual result as fast as possible, then adjust later.",
+        trackWeights: { fullstack_devops: 2, mobile_dev: 3 },
+        styleWeights: { Kinesthetic: 1 },
+        traitScores: { "Frontend Implementation": 85 },
+        interests: ["UI/UX"],
+      },
+      {
+        id: "aq-01-c",
+        label: "Explore the available data first to see what insights it can provide.",
+        trackWeights: { data_ai: 3 },
+        styleWeights: { "Reading/Writing": 1 },
+        traitScores: { "Data Intuition": 85 },
+        interests: ["Data Analysis"],
+      },
+      {
+        id: "aq-01-d",
+        label: "Think about where the system could be attacked or fail.",
+        trackWeights: { security: 3 },
+        styleWeights: { "Reading/Writing": 1 },
+        traitScores: { "Security Mindset": 85, "System Thinking": 65 },
+        interests: ["Cybersecurity"],
+      },
+    ],
+  },
+  {
+    id: "aq-02",
+    order: 2,
+    prompt: "How do you learn new things the fastest?",
+    options: [
+      {
+        id: "aq-02-a",
+        label: "Follow a workshop or tutorial, then tweak it to make it my own.",
+        trackWeights: { fullstack_devops: 1 },
+        styleWeights: { Kinesthetic: 3 },
+        traitScores: { "Problem Decomposition": 70 },
+        interests: [],
+      },
+      {
+        id: "aq-02-b",
+        label: "Watch a video or look at diagrams to get the big picture first.",
+        trackWeights: {},
+        styleWeights: { Visual: 3 },
+        traitScores: { "System Thinking": 70 },
+        interests: [],
+      },
+      {
+        id: "aq-02-c",
+        label: "Read official documentation or books thoroughly from start to finish.",
+        trackWeights: { security: 1 },
+        styleWeights: { "Reading/Writing": 3 },
+        traitScores: { "Security Mindset": 60 },
+        interests: [],
+      },
+      {
+        id: "aq-02-d",
+        label: "Listen to a podcast or have a friend explain and discuss it.",
+        trackWeights: {},
+        styleWeights: { Auditory: 3 },
+        traitScores: { "Problem Decomposition": 60 },
+        interests: [],
+      },
+    ],
+  },
+  {
+    id: "aq-03",
+    order: 3,
+    prompt: "What kind of work makes you so engaged that you lose track of time?",
+    options: [
+      {
+        id: "aq-03-a",
+        label: "Writing automation scripts to turn manual tasks into automated processes.",
+        trackWeights: { fullstack_devops: 3 },
+        styleWeights: { Kinesthetic: 1 },
+        traitScores: { "System Thinking": 80 },
+        interests: ["Automation"],
+      },
+      {
+        id: "aq-03-b",
+        label: "Building apps that people actually use and getting their feedback.",
+        trackWeights: { mobile_dev: 3, fullstack_devops: 1 },
+        styleWeights: { Kinesthetic: 1 },
+        traitScores: { "Frontend Implementation": 80 },
+        interests: ["Web Development"],
+      },
+      {
+        id: "aq-03-c",
+        label: "Playing with datasets until discovering insights that others missed.",
+        trackWeights: { data_ai: 3 },
+        styleWeights: { Visual: 1 },
+        traitScores: { "Data Intuition": 80 },
+        interests: ["Machine Learning"],
+      },
+      {
+        id: "aq-03-d",
+        label: "Debugging or analyzing a system to find the root cause of a deep issue.",
+        trackWeights: { security: 3 },
+        styleWeights: { "Reading/Writing": 1 },
+        traitScores: { "Security Mindset": 80, "Problem Decomposition": 70 },
+        interests: ["Reverse Engineering"],
+      },
+    ],
+  },
+  {
+    id: "aq-04",
+    order: 4,
+    prompt: "If you could choose one free elective course right now, which would it be?",
+    options: [
+      {
+        id: "aq-04-a",
+        label: "Cloud & DevOps — I want to learn how to automate deployments.",
+        trackWeights: { fullstack_devops: 3 },
+        styleWeights: {},
+        traitScores: { "System Thinking": 75 },
+        interests: ["Cloud Infrastructure"],
+      },
+      {
+        id: "aq-04-b",
+        label: "Mobile App Development — I want to publish my own app to the store.",
+        trackWeights: { mobile_dev: 3 },
+        styleWeights: {},
+        traitScores: { "Frontend Implementation": 75 },
+        interests: ["Mobile Development"],
+      },
+      {
+        id: "aq-04-c",
+        label: "Machine Learning — I want to build predictive models from real data.",
+        trackWeights: { data_ai: 3 },
+        styleWeights: {},
+        traitScores: { "Data Intuition": 75 },
+        interests: ["Machine Learning"],
+      },
+      {
+        id: "aq-04-d",
+        label: "Ethical Hacking — I want to learn how to ethically hack systems.",
+        trackWeights: { security: 3 },
+        styleWeights: {},
+        traitScores: { "Security Mindset": 75 },
+        interests: ["Cybersecurity"],
+      },
+    ],
+  },
+  {
+    id: "aq-05",
+    order: 5,
+    prompt: "What does your ideal future self look like after graduation?",
+    options: [
+      {
+        id: "aq-05-a",
+        label: "An engineer who maintains large systems reliably and deploys daily.",
+        trackWeights: { fullstack_devops: 3, security: 1 },
+        styleWeights: {},
+        traitScores: { "System Thinking": 80 },
+        interests: ["DevOps Culture"],
+      },
+      {
+        id: "aq-05-b",
+        label: "A developer with my own applications used by real people.",
+        trackWeights: { mobile_dev: 3, fullstack_devops: 1 },
+        styleWeights: {},
+        traitScores: { "Frontend Implementation": 78 },
+        interests: ["Product Building"],
+      },
+      {
+        id: "aq-05-c",
+        label: "An expert who uses data to help organizations make critical decisions.",
+        trackWeights: { data_ai: 3 },
+        styleWeights: {},
+        traitScores: { "Data Intuition": 78 },
+        interests: ["Data Engineering"],
+      },
+      {
+        id: "aq-05-d",
+        label: "A system guardian trusted by organizations to handle all security.",
+        trackWeights: { security: 3 },
+        styleWeights: {},
+        traitScores: { "Security Mindset": 78 },
+        interests: ["Security Operations"],
+      },
+    ],
+  },
+  {
+    id: "aq-06",
+    order: 6,
+    prompt: "What role do you naturally take on in group projects?",
+    options: [
+      {
+        id: "aq-06-a",
+        label: "The one who structures the work and delegates tasks so everyone is on the same page.",
+        trackWeights: { fullstack_devops: 2 },
+        styleWeights: { Visual: 1 },
+        traitScores: { "Problem Decomposition": 82, "System Thinking": 72 },
+        interests: ["Team Leadership"],
+      },
+      {
+        id: "aq-06-b",
+        label: "The one who implements the most difficult parts to get things done.",
+        trackWeights: { fullstack_devops: 1, mobile_dev: 2 },
+        styleWeights: { Kinesthetic: 1 },
+        traitScores: { "Frontend Implementation": 76, "Problem Decomposition": 70 },
+        interests: [],
+      },
+      {
+        id: "aq-06-c",
+        label: "The one who researches and summarizes evidence to support team decisions.",
+        trackWeights: { data_ai: 2 },
+        styleWeights: { "Reading/Writing": 1 },
+        traitScores: { "Data Intuition": 76 },
+        interests: [],
+      },
+      {
+        id: "aq-06-d",
+        label: "The one who reviews the work to find mistakes before submission, as I often spot overlooked flaws.",
+        trackWeights: { security: 2 },
+        styleWeights: { "Reading/Writing": 1 },
+        traitScores: { "Security Mindset": 76, "Problem Decomposition": 68 },
+        interests: [],
+      },
+    ],
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Module 13: Subscription Plans (Free / Pro / Diamond simulation)
+// ---------------------------------------------------------------------------
+
+export const mockSubscriptionPlans: SubscriptionPlan[] = [
+  {
+    tier: "free",
+    name: "Free",
+    tagline: "Get started with the essentials of your study journey",
+    priceMonthly: 0,
+    priceYearly: 0,
+    highlighted: false,
+    perks: [
+      "Dashboard & Weekly Smart Planner",
+      "Adaptive Roadmap & Skill Gap Matrix",
+      "AI Assistant — 5 messages / day",
+      "Basic study analytics",
+    ],
+  },
+  {
+    tier: "pro",
+    name: "Pro",
+    tagline: "Unlock full AI-powered course planning and progress tracking",
+    priceMonthly: 9.99,
+    priceYearly: 1490,
+    highlighted: true,
+    perks: [
+      "Everything in Free",
+      "Unlimited AI Assistant messages",
+      "Course Selection & Optimized Schedule Builder",
+      "GPA & Credit progress tracking",
+      "Full Knowledge Gap history log",
+    ],
+  },
+  {
+    tier: "diamond",
+    name: "Diamond",
+    tagline: "White-glove guidance all the way to graduation",
+    priceMonthly: 29.99,
+    priceYearly: 299.99,
+    highlighted: false,
+    perks: [
+      "Everything in Pro",
+      "1-on-1 mentor consultation, 2 sessions / month",
+      "Priority cooperative education matching",
+      "Priority AI Assistant response speed",
+    ],
+  },
+];
+
+export const mockPlanFeatures: PlanFeatureRow[] = [
+  { key: "dashboard", label: "Dashboard & Weekly Smart Planner", free: true, pro: true, diamond: true },
+  { key: "roadmap", label: "Adaptive Roadmap & Skill Gap Matrix", free: true, pro: true, diamond: true },
+  { key: "ai_assistant", label: "AI Learning Assistant", free: "5 messages / day", pro: "Unlimited", diamond: "Unlimited + priority" },
+  { key: "course_selection", label: "Course Selection & Optimized Scheduling", free: false, pro: true, diamond: true },
+  { key: "academic_progress", label: "GPA & Credit Progress Tracking", free: false, pro: true, diamond: true },
+  { key: "knowledge_gap_history", label: "Knowledge Gap History Log", free: false, pro: true, diamond: true },
+  { key: "mentor_sessions", label: "1-on-1 Mentor Consultation", free: false, pro: false, diamond: "2 sessions / month" },
+  { key: "career_matching", label: "Priority Cooperative Education Matching", free: false, pro: false, diamond: true },
+];
+
+export const mockUserSubscription: UserSubscription = {
+  studentId: "std-001",
+  tier: "free",
+  status: "active",
+  subscribedSince: "2026-01-10",
+  renewsOn: "2026-08-10",
+  billingCycle: "monthly",
+  aiAssistantMessagesUsedToday: 2,
+};

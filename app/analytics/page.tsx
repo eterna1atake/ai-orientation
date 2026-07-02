@@ -1,15 +1,19 @@
 "use client";
 
 import { useAnalytics } from "@/presentation/hooks/useAnalytics";
+import { useSubscriptionGate } from "@/presentation/hooks/useSubscriptionGate";
 import { AnalyticsCharts } from "@/presentation/components/analytics/AnalyticsCharts";
+import { AcademicProgressWidget } from "@/presentation/components/analytics/AcademicProgressWidget";
 import { KnowledgeGapHistoryList } from "@/presentation/components/analytics/KnowledgeGapHistoryList";
+import { LockedSectionCard } from "@/presentation/components/subscription/LockedSectionCard";
 import { StatCard } from "@/presentation/components/ui/StatCard";
 import { ListChecks, Flame, Clock, Target } from "lucide-react";
 
 export default function AnalyticsPage() {
   const { analytics, summary, velocityTrend, knowledgeGapHistory, isLoading } = useAnalytics();
+  const { hasAccess: hasProAccess, isLoading: isGateLoading } = useSubscriptionGate("pro");
 
-  if (isLoading || !analytics || !summary) {
+  if (isLoading || isGateLoading || !analytics || !summary) {
     return (
       <div className="flex h-96 items-center justify-center text-sm text-slate-400">
         Loading Analytics data...
@@ -31,9 +35,19 @@ export default function AnalyticsPage() {
         <StatCard label="Avg Focus / Day" value={`${summary.avgFocusHours}h`} icon={Clock} accentClassName="bg-emerald-50 text-emerald-600" />
       </div>
 
+      {hasProAccess ? (
+        <AcademicProgressWidget record={analytics.academicRecord} />
+      ) : (
+        <LockedSectionCard requiredTier="pro" featureName="GPA & Credit Progress Tracking" />
+      )}
+
       <AnalyticsCharts analytics={analytics} velocityTrend={velocityTrend} />
 
-      <KnowledgeGapHistoryList history={knowledgeGapHistory} />
+      {hasProAccess ? (
+        <KnowledgeGapHistoryList history={knowledgeGapHistory} />
+      ) : (
+        <LockedSectionCard requiredTier="pro" featureName="Knowledge Gap History Log" />
+      )}
     </div>
   );
 }

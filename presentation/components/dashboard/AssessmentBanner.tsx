@@ -1,4 +1,5 @@
-import { Sparkles } from "lucide-react";
+import Link from "next/link";
+import { Sparkles, RotateCcw } from "lucide-react";
 import { Student } from "@/domain/entities";
 import { Card } from "@/presentation/components/ui/Card";
 import { Badge } from "@/presentation/components/ui/Badge";
@@ -26,9 +27,17 @@ export function AssessmentBanner({ student }: { student: Student }) {
             </div>
           </div>
         </div>
-        <div className="shrink-0 text-center sm:text-right">
-          <p className="text-3xl font-bold">{assessmentProfile.confidenceScore}%</p>
-          <p className="text-xs text-indigo-100">AI Confidence Score</p>
+        <div className="flex shrink-0 flex-col items-center gap-2 sm:items-end">
+          <div className="text-center sm:text-right">
+            <p className="text-3xl font-bold">{assessmentProfile.confidenceScore}%</p>
+            <p className="text-xs text-indigo-100">AI Confidence Score</p>
+          </div>
+          <Link
+            href="/assessment"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-white/15 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-white/25"
+          >
+            <RotateCcw className="h-3.5 w-3.5" /> Retake Assessment
+          </Link>
         </div>
       </div>
     </Card>
