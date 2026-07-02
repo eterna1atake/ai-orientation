@@ -17,6 +17,7 @@ import {
   SubscriptionPlan,
   PlanFeatureRow,
   UserSubscription,
+  StudyActivityDay,
 } from "@/domain/entities";
 
 // ---------------------------------------------------------------------------
@@ -273,9 +274,37 @@ export const mockAcademicRecord: AcademicRecord = {
   ],
 };
 
+// Deterministic 10-week daily activity log ending "today" (2026-07-02) for the
+// Student Profile activity heatmap. Built from a fixed anchor + pure arithmetic
+// (no Date.now()/Math.random()) so server and client render identical values.
+function buildActivityLog(): StudyActivityDay[] {
+  const ANCHOR = new Date("2026-07-02T00:00:00+07:00");
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const TOTAL_DAYS = 70;
+
+  const days: StudyActivityDay[] = [];
+  for (let i = TOTAL_DAYS - 1; i >= 0; i--) {
+    const date = new Date(ANCHOR.getTime() - i * DAY_MS);
+    const dayOfWeek = date.getDay(); // 0 = Sunday
+    const weekIndex = Math.floor((TOTAL_DAYS - 1 - i) / 7); // 0 (oldest) .. 9 (this week)
+    const isRestDay = dayOfWeek === 0 || i % 11 === 0;
+
+    let hours = 0;
+    if (!isRestDay) {
+      const weekdayBase = dayOfWeek === 6 ? 1.5 : 2.5;
+      const examCrunchBonus = weekIndex * 0.15; // busier as the term progresses toward today
+      hours = Math.round((weekdayBase + examCrunchBonus) * 2) / 2;
+    }
+
+    days.push({ date: date.toISOString().slice(0, 10), hours });
+  }
+  return days;
+}
+
 export const mockAnalytics: StudyAnalytics = {
   studentId: "std-001",
   academicRecord: mockAcademicRecord,
+  activityLog: buildActivityLog(),
   roadmapCompletionPercent: 58,
   totalTasksCompleted: 7,
   totalTasksRemaining: 5,

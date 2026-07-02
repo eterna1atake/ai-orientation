@@ -22,6 +22,12 @@ export interface AcademicRecord {
   graduationMilestones: GraduationMilestone[];
 }
 
+// Daily study activity, used for the Student Profile activity heatmap
+export interface StudyActivityDay {
+  date: string; // ISO date, e.g. "2026-06-30"
+  hours: number;
+}
+
 export interface StudyAnalytics {
   studentId: string;
   roadmapCompletionPercent: number;
@@ -32,4 +38,5 @@ export interface StudyAnalytics {
   weeklyVelocity: WeeklyVelocityPoint[];
   subjectBreakdown: { subject: string; hoursStudied: number }[];
   academicRecord: AcademicRecord;
+  activityLog: StudyActivityDay[];
 }

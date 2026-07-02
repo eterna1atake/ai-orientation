@@ -8,6 +8,7 @@ import { NAV_ITEMS } from "./navItems";
 
 const SIDEBAR_LABELS: Record<string, string> = {
   "/": "Dashboard",
+  "/profile": "Student Profile",
   "/assessment": "AI Assessment",
   "/course-selection": "Course Selection",
   "/schedule-builder": "Schedule Builder",
